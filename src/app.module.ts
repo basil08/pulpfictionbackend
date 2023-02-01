@@ -4,7 +4,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CoreModule } from './core/core.module';
-import { AdminModule } from './admin/admin.module';
 import CONFIG from './utils/config';
 
 const LOCAL_MONGODB_URI = 'mongodb://localhost:27017/pulpfiction';
@@ -14,7 +13,6 @@ const LOCAL_MONGODB_URI = 'mongodb://localhost:27017/pulpfiction';
     MongooseModule.forRoot(CONFIG.MONGODB_URI || LOCAL_MONGODB_URI),
     AuthModule,
     CoreModule,
-    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

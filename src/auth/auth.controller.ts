@@ -14,6 +14,7 @@ export class AuthController {
   @Post('createUser')
   async createUser(@Body() createUserDto: CreateUserDto) {
     const { password, email, username } = createUserDto;
+
     const u = await this.authService.createUser(password, username, email);
 
     if (u === 1) {
