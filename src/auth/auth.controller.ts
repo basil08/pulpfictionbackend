@@ -5,14 +5,15 @@ import { AuthService } from './auth.service';
 import { UserLocalGuard } from './passport/user-local,guard';
 import { Request as ExpressRequest } from 'express';
 import { UserAuthGuard } from './passport/user-auth.guard';
+import { CreateUserDto } from './dtos/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('createUser')
-  async createUser(@Body() _body) {
-    const { password, email, username } = _body;
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    const { password, email, username } = createUserDto;
     const u = await this.authService.createUser(password, username, email);
 
     if (u === 1) {
