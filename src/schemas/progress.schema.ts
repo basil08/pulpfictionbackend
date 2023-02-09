@@ -8,7 +8,7 @@ export class Progress {
   @Prop({ default: false })
   have_watched: boolean;
 
-  @Prop()
+  @Prop({ default: false })
   on_watchlist: boolean;
 
   @Prop({
@@ -16,14 +16,14 @@ export class Progress {
     ref: 'User',
     required: true,
   })
-  user: User;
+  user_id: User;
 
   @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Movie',
     required: true,
   })
-  movie: Movie;
+  movie_id: Movie;
 
   @Prop({ default: null })
   first_watch: Date;
@@ -33,6 +33,9 @@ export class Progress {
 
   @Prop({ default: null })
   last_updated: Date;
+
+  @Prop({ default: 0 })
+  review_count: number;
 }
 
 export type ProgressDocuement = Progress & Document;

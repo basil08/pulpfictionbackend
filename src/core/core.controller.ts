@@ -13,6 +13,7 @@ import { Request as ExpressRequest } from 'express';
 import { Body, UseGuards } from '@nestjs/common/decorators';
 import { UserAuthGuard } from 'src/auth/passport/user-auth.guard';
 import { CreateMovieDto } from './dtos/create-movie.dto';
+import { CreateProgressDto } from './dtos/create-progress.dto';
 
 @Controller('api')
 @UseGuards(UserAuthGuard)
@@ -63,6 +64,7 @@ export class CoreController {
   }
 
   @Get('getMovies')
+  @UseGuards(UserAuthGuard)
   async getMovies(@Query('skip') skip: number, @Query('limit') limit: number) {
     return this.coreService.getMovies(skip, limit);
   }
@@ -77,5 +79,24 @@ export class CoreController {
   @UseGuards(UserAuthGuard)
   async createMovies(@Body() _body: any[], @Req() req: ExpressRequest) {
     return this.coreService.createMovies(_body, req.user.id);
+  }
+
+
+  @Post('createProgress')
+  @UseGuards(UserAuthGuard)
+  async createProgress(@Body() createProgressDto: CreateProgressDto, @Req() req: ExpressRequest) {
+    const user_id = req.user.id;
+
+    const { have_watched, on_watchlist, movie_id, first_watch, is_reviewed, last_updated, review_count } = createProgressDto;
+    return this.coreService.createProgress(
+      have_watched,
+      on_watchlist,
+      user_id,
+      movie_id,
+      first_watch,
+      is_reviewed,
+      last_updated,
+      review_count
+    );
   }
 }

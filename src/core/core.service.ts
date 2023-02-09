@@ -3,12 +3,14 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Movie, MovieDocument } from 'src/schemas/movie.schema';
 import { BadRequestException } from '@nestjs/common/exceptions';
+import { Progress, ProgressDocuement } from 'src/schemas/progress.schema';
 
 @Injectable()
 export class CoreService {
 
   constructor(
     @InjectModel(Movie.name) private movieModel: Model<MovieDocument>,
+    @InjectModel(Progress.name) private progressModel: Model<ProgressDocuement>
   ) {}
 
   // CRUD MOVIE
@@ -91,5 +93,41 @@ export class CoreService {
     const thisTime = new Date();
     const response = await this.movieModel.insertMany(body.map((item) => {return {...item, created_at: thisTime, created_by: user_id}}));
     return {count: response.length};
+  }
+
+
+  // CRUD on PROGRESS object
+
+  async createProgress(
+    have_watched: boolean,
+    on_watchlist: boolean,
+    user_id: string,
+    movie_id: string,
+    first_watch: Date,
+    is_reviewed: boolean,
+    last_updated: Date,
+    review_count: number
+  ) {
+
+    if (!user_id) {
+      throw new BadRequestException("User was not provided!");
+    }
+
+    if (!movie_id) {
+      throw new BadRequestException("Movie was not provided");
+    }
+
+    const progress = new this.progressModel({
+      have_watched,
+      on_watchlist,
+      user_id,
+      movie_id,
+      first_watch,
+      is_reviewed,
+      last_updated,
+      review_count
+    });
+
+    return progress.save();
   }
 }
